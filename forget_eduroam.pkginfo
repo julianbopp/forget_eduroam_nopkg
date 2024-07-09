@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>OnDemand</key>
+	<true/>
+	<key>_metadata</key>
+	<dict>
+		<key>created_by</key>
+		<string>pewiby59</string>
+		<key>creation_date</key>
+		<date>2024-07-09T11:39:41Z</date>
+		<key>munki_version</key>
+		<string>6.5.1.4661</string>
+		<key>os_version</key>
+		<string>14.5</string>
+	</dict>
+	<key>autoremove</key>
+	<false/>
+	<key>catalogs</key>
+	<array>
+		<string>testing</string>
+	</array>
+	<key>installer_type</key>
+	<string>nopkg</string>
+	<key>minimum_os_version</key>
+	<string>10.4.0</string>
+	<key>name</key>
+	<string>forget_eduroam</string>
+	<key>postinstall_script</key>
+	<string>#!/bin/zsh
+
+wifi_interface=$(networksetup -listallhardwareports | grep "Wi-Fi" -A1 | grep -v "Wi-Fi" | awk '{ print $NF }')
+grep_eduroam=$(networksetup -listpreferredwirelessnetworks en0 | grep "eduroam" | awk '{ print $NF }')
+
+echo "Wi-Fi Interface: $wifi_interface"
+echo "Network name: $grep_eduroam"
+
+if [[ -z "$grep_eduroam" ]]; then
+	echo "No Wi-Fi named 'eduroam' in list of known networks. Exiting..."
+	exit 0
+else
+	echo "'eduroam' found in list of known networks. Have to remove 'eduroam'..."
+	echo "Forgetting 'eduroam' Wi-Fi network..."
+	sudo networksetup -removepreferredwirelessnetwork "$wifi_interface" eduroam
+fi
+
+echo "Done. Exiting..."
+</string>
+	<key>unattended_install</key>
+	<true/>
+	<key>uninstall_method</key>
+	<string>uninstall_script</string>
+	<key>uninstall_script</key>
+	<string>#!/bin/zsh
+
+exit 0
+</string>
+	<key>uninstallable</key>
+	<true/>
+	<key>version</key>
+	<string>1.0</string>
+</dict>
+</plist>
+
