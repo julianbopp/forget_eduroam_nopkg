@@ -6,5 +6,13 @@ grep_eduroam=$(networksetup -listpreferredwirelessnetworks en0 | grep "eduroam" 
 echo "Wi-Fi Interface: $wifi_interface"
 echo "Network name: $grep_eduroam"
 
-echo "Forgetting 'eduroam' Wi-Fi network..."
-sudo networksetup -removepreferredwirelessnetwork "$wifi_interface" eduroam
+if [[ -z "$grep_eduroam" ]]; then
+	echo "No Wi-Fi named 'eduroam' in list of known networks. Exiting..."
+	exit 0
+else
+	echo "'eduroam' found in list of known networks. Have to remove 'eduroam'..."
+	echo "Forgetting 'eduroam' Wi-Fi network..."
+	sudo networksetup -removepreferredwirelessnetwork "$wifi_interface" eduroam
+fi
+
+echo "Done. Exiting..."
