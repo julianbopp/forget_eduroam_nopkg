@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+echo "Creating munki OnDeman nopkg."
+makepkginfo --nopkg --name=forget_eduroam \
+	--pkgvers=1.0\
+	--postinstall_script=postinstall_script \
+	--uninstall_script=uninstall_script \
+	--unattended_install >forget_eduroam.pkginfo \
+	--OnDemand
+echo "Done. Exiting..."
+# --installcheck_script=installcheck_script \

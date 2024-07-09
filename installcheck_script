@@ -1,0 +1,17 @@
+#!/bin/zsh
+
+wifi_interface=$(networksetup -listallhardwareports | grep "Wi-Fi" -A1 | grep -v "Wi-Fi" | awk '{ print $NF }')
+grep_eduroam=$(networksetup -listpreferredwirelessnetworks en0 | grep "eduroam" | awk '{ print $NF }')
+
+echo "Wi-Fi Interface: $wifi_interface"
+echo "Network name: $grep_eduroam"
+
+if [[ -z "$grep_eduroam" ]]; then
+	# Installed
+	echo "No Wi-Fi named 'eduroam' in list of known networks. Exiting..."
+	exit 0
+else
+	# Not Installed
+	echo "'eduroam' found in list of known networks. Have to remove 'eduroam'..."
+	exit 1
+fi

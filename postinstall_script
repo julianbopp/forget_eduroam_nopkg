@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+wifi_interface=$(networksetup -listallhardwareports | grep "Wi-Fi" -A1 | grep -v "Wi-Fi" | awk '{ print $NF }')
+grep_eduroam=$(networksetup -listpreferredwirelessnetworks en0 | grep "eduroam" | awk '{ print $NF }')
+
+echo "Wi-Fi Interface: $wifi_interface"
+echo "Network name: $grep_eduroam"
+
+echo "Forgetting 'eduroam' Wi-Fi network..."
+sudo networksetup -removepreferredwirelessnetwork "$wifi_interface" eduroam
